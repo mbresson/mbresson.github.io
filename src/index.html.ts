@@ -36,6 +36,7 @@ export const html = ({ lang, css }: PageOptions): string => /* HTML */ `<!DOCTYP
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${translateText("meta.title", lang)}</title>
     <meta name="description" content="${translateText("meta.description", lang)}" />
+    <link rel="icon" href="/assets/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="canonical" href="${SITE_URL}${pagePath(lang)}" />
     ${LANGUAGES.map(
       (l) => /* HTML */ `<link rel="alternate" hreflang="${l}" href="${SITE_URL}${pagePath(l)}" />`,

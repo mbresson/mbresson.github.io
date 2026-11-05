@@ -46,6 +46,7 @@ const run = async (): Promise<void> => {
 const MIME_TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
   ".webp": "image/webp",
+  ".ico": "image/x-icon",
 };
 
 // Minimal static server for dist/, since pages use root-absolute URLs.

@@ -1,0 +1,256 @@
+:root {
+  --ink: #1f2430;
+  --text: #3b4252;
+  --muted: #7d8088;
+  --accent: #2b5188;
+  --highlight: #f2c14e;
+  --wash: 252, 247, 238;
+  --serif: "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.85;
+  color: var(--text);
+  background: rgb(var(--wash));
+}
+
+/* The painting, washed out so the text stays readable. */
+body::before {
+  content: "";
+  position: fixed;
+  /* Overscan so the blur doesn't fade at the edges. */
+  inset: -16px;
+  z-index: -1;
+  filter: blur(3px);
+  background:
+    linear-gradient(rgba(var(--wash), 0.8), rgba(var(--wash), 0.8)),
+    url("assets/background.jpg") center / cover no-repeat;
+}
+
+.page {
+  max-width: 744px;
+  margin: 0 auto;
+  padding: 24px 24px 72px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.photo {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgb(var(--wash));
+  box-shadow: 0 0 0 1px rgba(31, 36, 48, 0.12), 0 2px 8px rgba(31, 36, 48,
+    0.15);
+}
+
+.name {
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.languages {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.flag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 44px; /* comfortable tap target */
+  padding: 4px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  opacity: 0.6;
+  filter: saturate(0.5);
+  transition: opacity 0.15s, filter 0.15s;
+}
+
+.flag:hover,
+.flag:focus-visible {
+  opacity: 1;
+  filter: none;
+}
+
+.flag[aria-pressed="true"] {
+  border-color: var(--highlight);
+  background: rgba(255, 255, 255, 0.35);
+  opacity: 1;
+  filter: none;
+  cursor: default;
+}
+
+.flag svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+
+main {
+  padding-top: 56px;
+}
+
+h1 {
+  margin: 0 0 32px;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.22;
+  color: var(--ink);
+}
+
+h1 em {
+  color: var(--accent);
+}
+
+p {
+  margin: 0 0 24px;
+  font-size: 19px;
+}
+
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--highlight);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+a:hover {
+  text-decoration-color: var(--accent);
+}
+
+/* Now */
+.now {
+  margin-top: 64px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(31, 36, 48, 0.08);
+}
+
+.now h2 {
+  margin: 0 0 20px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.now dl {
+  margin: 0;
+}
+
+.now dl > div {
+  margin-bottom: 20px;
+}
+
+.now dt {
+  font-style: italic;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.now dd {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.flag:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Desktop */
+@media (min-width: 720px) {
+  body {
+    font-size: 19px;
+  }
+
+  .page {
+    padding-top: 80px;
+  }
+
+  .name {
+    font-size: 21px;
+  }
+
+  .photo {
+    width: 64px;
+    height: 64px;
+  }
+
+  .languages {
+    gap: 6px;
+  }
+
+  .flag {
+    width: 52px;
+    height: 48px;
+  }
+
+  main {
+    padding-top: 96px;
+  }
+
+  p {
+    font-size: 21px;
+  }
+
+  h1 {
+    font-size: 46px;
+    margin-bottom: 36px;
+  }
+
+  .now {
+    margin-top: 72px;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .now dl > div {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+
+  .now dt,
+  .now dd {
+    line-height: 1.8;
+  }
+}

@@ -1,5 +1,5 @@
 import { watch } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { build, transform } from "esbuild";
 import type { Assets } from "./src/index.html.ts";
 
@@ -24,10 +24,20 @@ const buildJs = async (): Promise<string> => {
   return result.outputFiles[0].text.trim();
 };
 
-// The query string makes Node treat each build as a new module, so edits to
-// index.html.ts are picked up in dev mode (a plain import() would be cached).
-const loadHtml = async (): Promise<(assets: Assets) => string> =>
-  (await import(`./src/index.html.ts?t=${Date.now()}`)).html;
+// Bundle index.html.ts on every build (inlining the modules it imports) and
+// import the result. The code is part of the URL, so each edit is a new module
+// and Node's import cache never serves a stale version in dev mode.
+const loadHtml = async (): Promise<(assets: Assets) => string> => {
+  const result = await build({
+    entryPoints: ["src/index.html.ts"],
+    bundle: true,
+    format: "esm",
+    platform: "node",
+    write: false,
+  });
+  const code = result.outputFiles[0].text;
+  return (await import(`data:text/javascript;base64,${Buffer.from(code).toString("base64")}`)).html;
+};
 
 const run = async (): Promise<void> => {
   const start = performance.now();
@@ -37,6 +47,7 @@ const run = async (): Promise<void> => {
     loadHtml(),
   ]);
   await mkdir("dist", { recursive: true });
+  await cp("src/assets", "dist/assets", { recursive: true });
   await writeFile("dist/index.html", html({ css, js }));
   console.log(
     `Built dist/index.html in ${Math.round(performance.now() - start)}ms`,

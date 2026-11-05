@@ -1,20 +1,46 @@
 import { flagEn, flagFr, flagSv } from "./flags.html.ts";
+import {
+  LANGUAGES,
+  translate,
+  translateText,
+  type Language,
+} from "./translation/index.ts";
 
-export type Assets = {
-  css: string;
-  js: string;
+export { LANGUAGES, type Language };
+
+// Canonical origin, used for hreflang/canonical links.
+const SITE_URL = "https://matthieu-bresson.com";
+
+const FLAGS: Record<Language, string> = { en: flagEn, fr: flagFr, sv: flagSv };
+
+// Each language's own name, deliberately not translated.
+const LANGUAGE_NAMES: Record<Language, string> = {
+  en: "English",
+  fr: "Français",
+  sv: "Svenska",
 };
 
-export const html = ({ css, js }: Assets): string => /* HTML */ `<!DOCTYPE html>
-<html lang="en">
+/** URL path of a language's page: English is the root, others get a folder. */
+export const pagePath = (lang: Language): string =>
+  lang === "en" ? "/" : `/${lang}/`;
+
+export type PageOptions = {
+  lang: Language;
+  css: string;
+};
+
+export const html = ({ lang, css }: PageOptions): string => /* HTML */ `<!DOCTYPE html>
+<html lang="${lang}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Matthieu Bresson</title>
-    <meta
-      name="description"
-      content="Personal homepage of Matthieu Bresson."
-    />
+    <title>${translateText("meta.title", lang)}</title>
+    <meta name="description" content="${translateText("meta.description", lang)}" />
+    <link rel="canonical" href="${SITE_URL}${pagePath(lang)}" />
+    ${LANGUAGES.map(
+      (l) => /* HTML */ `<link rel="alternate" hreflang="${l}" href="${SITE_URL}${pagePath(l)}" />`,
+    ).join("\n    ")}
+    <link rel="alternate" hreflang="x-default" href="${SITE_URL}/" />
     <style>${css}</style>
   </head>
   <body>
@@ -23,65 +49,46 @@ export const html = ({ css, js }: Assets): string => /* HTML */ `<!DOCTYPE html>
         <div class="identity">
           <img
             class="photo"
-            src="assets/photo.jpg"
-            alt="Portrait of Matthieu Bresson"
+            src="/assets/photo.webp"
+            alt="${translateText("photo.alt", lang)}"
             width="52"
             height="52"
           />
           <span class="name">Matthieu Bresson</span>
         </div>
 
-        <nav class="languages" aria-label="Language">
-          <button type="button" class="flag" lang="en" aria-label="English" aria-pressed="true">
-            ${flagEn}
-          </button>
-          <button type="button" class="flag" lang="fr" aria-label="Français" aria-pressed="false">
-            ${flagFr}
-          </button>
-          <button type="button" class="flag" lang="sv" aria-label="Svenska" aria-pressed="false">
-            ${flagSv}
-          </button>
+        <nav class="languages" aria-label="${translateText("aria.language", lang)}">
+          ${LANGUAGES.map(
+            (l) => /* HTML */ `<a class="flag" href="${pagePath(l)}" hreflang="${l}" lang="${l}" aria-label="${LANGUAGE_NAMES[l]}"${l === lang ? ' aria-current="page"' : ""}>${FLAGS[l]}</a>`,
+          ).join("\n          ")}
         </nav>
       </header>
 
       <main>
-        <h1>
-          Hello — I'm Matthieu. I make things, read too many books, and believe
-          in <em>slow, careful work</em>.
-        </h1>
+        <h1>${translate("headline", lang)}</h1>
 
-        <p>
-          I live in Sweden, where I spend my days on
-          <a href="#">a job I like</a> and my evenings on whatever has caught my
-          curiosity that week. This is a small, quiet home for some of it.
-        </p>
-        <p>
-          If something here resonates, I'd love to hear from you. You can find
-          me on
-          <a href="https://www.linkedin.com/in/matthieu-bresson">LinkedIn</a>
-          and <a href="https://github.com/mbresson">GitHub</a>.
-        </p>
+        <p>${translate("intro", lang)}</p>
+        <p>${translate("contact", lang)}</p>
 
         <section class="now" aria-labelledby="now-title">
-          <h2 id="now-title">Now</h2>
+          <h2 id="now-title">${translate("now.title", lang)}</h2>
           <dl>
             <div>
-              <dt>Reading</dt>
-              <dd>Gilead, by Marilynne Robinson</dd>
+              <dt>${translate("now.reading.label", lang)}</dt>
+              <dd>${translate("now.reading.value", lang)}</dd>
             </div>
             <div>
-              <dt>Learning</dt>
-              <dd>To draw with ink and a single brush</dd>
+              <dt>${translate("now.learning.label", lang)}</dt>
+              <dd>${translate("now.learning.value", lang)}</dd>
             </div>
             <div>
-              <dt>Planning</dt>
-              <dd>A walk along the coast of Brittany</dd>
+              <dt>${translate("now.planning.label", lang)}</dt>
+              <dd>${translate("now.planning.value", lang)}</dd>
             </div>
           </dl>
         </section>
       </main>
     </div>
-    <script>${js}</script>
   </body>
 </html>
 `;

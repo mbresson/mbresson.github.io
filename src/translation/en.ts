@@ -1,0 +1,16 @@
+export const TRANSLATIONS_EN = {
+  "meta.title": "Matthieu Bresson — Homepage",
+  "meta.description": "Personal homepage of Matthieu Bresson.",
+  "aria.language": "Language",
+  "photo.alt": "Portrait of Matthieu Bresson",
+  headline: `Hello — I'm Matthieu. I make things, read too many books, and believe in <em>slow, careful work</em>.`,
+  intro: `I live in Sweden, where I spend my days on <a href="#">a job I like</a> and my evenings on whatever has caught my curiosity that week. This is a small, quiet home for some of it.`,
+  contact: `If something here resonates, I'd love to hear from you. You can find me on <a href="https://www.linkedin.com/in/matthieu-bresson">LinkedIn</a> and <a href="https://github.com/mbresson">GitHub</a>.`,
+  "now.title": "Now",
+  "now.reading.label": "Reading",
+  "now.reading.value": "Gilead, by Marilynne Robinson",
+  "now.learning.label": "Learning",
+  "now.learning.value": "To draw with ink and a single brush",
+  "now.planning.label": "Planning",
+  "now.planning.value": "A walk along the coast of Brittany",
+} as const;

@@ -17,7 +17,7 @@ export type TextTranslationKey = Extract<
 // Keys used as page content: may contain inline HTML.
 export type HtmlTranslationKey = Exclude<TranslationKey, TextTranslationKey>;
 
-export const LANGUAGES = ["en", "fr", "sv"] as const;
+export const LANGUAGES = ["en", "sv", "fr"] as const;
 export type Language = (typeof LANGUAGES)[number];
 
 const TRANSLATIONS: Record<Language, Record<TranslationKey, string>> = {

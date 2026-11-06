@@ -26,10 +26,9 @@ export const pagePath = (lang: Language): string =>
 
 export type PageOptions = {
   lang: Language;
-  css: string;
 };
 
-export const html = ({ lang, css }: PageOptions): string => /* HTML */ `<!DOCTYPE html>
+export const html = ({ lang }: PageOptions): string => /* HTML */ `<!DOCTYPE html>
 <html lang="${lang}">
   <head>
     <meta charset="UTF-8" />
@@ -42,7 +41,7 @@ export const html = ({ lang, css }: PageOptions): string => /* HTML */ `<!DOCTYP
       (l) => /* HTML */ `<link rel="alternate" hreflang="${l}" href="${SITE_URL}${pagePath(l)}" />`,
     ).join("\n    ")}
     <link rel="alternate" hreflang="x-default" href="${SITE_URL}/" />
-    <style>${css}</style>
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
     <div class="page">
@@ -89,6 +88,12 @@ export const html = ({ lang, css }: PageOptions): string => /* HTML */ `<!DOCTYP
           </dl>
         </section>
       </main>
+
+      ${lang === "fr"
+        ? ""
+        : /* HTML */ `<footer class="footnotes">
+        <p>${translate("pronunciation.note", lang)}</p>
+      </footer>`}
     </div>
   </body>
 </html>

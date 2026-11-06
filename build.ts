@@ -7,10 +7,10 @@ import type * as Page from "./src/index.html.ts";
 
 const isDev = process.argv.includes("--dev");
 
-const buildCss = async (): Promise<string> => {
+const buildCss = async (): Promise<void> => {
   const source = await readFile("src/style.css", "utf8");
   const { code } = await transform(source, { loader: "css", minify: true });
-  return code.trim();
+  await writeFile("dist/style.css", code);
 };
 
 // Bundle index.html.ts on every build (inlining the modules it imports) and
@@ -30,13 +30,14 @@ const loadPage = async (): Promise<typeof Page> => {
 
 const run = async (): Promise<void> => {
   const start = performance.now();
-  const [css, page] = await Promise.all([buildCss(), loadPage()]);
+  await mkdir("dist", { recursive: true });
+  const [page] = await Promise.all([loadPage(), buildCss()]);
   await cp("src/assets", "dist/assets", { recursive: true });
   for (const lang of page.LANGUAGES) {
     // "/" -> dist/index.html, "/fr/" -> dist/fr/index.html
     const file = `dist${page.pagePath(lang)}index.html`;
     await mkdir(dirname(file), { recursive: true });
-    await writeFile(file, page.html({ lang, css }));
+    await writeFile(file, page.html({ lang }));
   }
   console.log(
     `Built ${page.LANGUAGES.length} pages in ${Math.round(performance.now() - start)}ms`,
@@ -45,6 +46,7 @@ const run = async (): Promise<void> => {
 
 const MIME_TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
   ".webp": "image/webp",
   ".ico": "image/x-icon",
 };

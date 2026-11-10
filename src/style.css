@@ -133,9 +133,10 @@ h1 {
   color: var(--ink);
 }
 
-h1 em {
+em {
   color: var(--accent);
   font-weight: 500;
+  font-style: normal;
 }
 
 p {

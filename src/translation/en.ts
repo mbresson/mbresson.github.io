@@ -10,7 +10,7 @@ export const TRANSLATIONS_EN = {
   "now.title": "Now",
   "now.reading.label": "Reading",
   "now.reading.value":
-    "River of Stars, by Guy Gavriel Kay<br />Les Peuples du Nord : De Fróði à Harald l'Impitoyable by Lucie Malbos",
+    "Spinning Silver, by Naomi Novik<br />Les Peuples du Nord : De Fróði à Harald l'Impitoyable by Lucie Malbos",
   "now.learning.label": "Learning",
   "now.learning.value": "To speak Swedish",
   "now.planning.label": "Planning",

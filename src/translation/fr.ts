@@ -12,7 +12,7 @@ export const TRANSLATIONS_FR = {
   "now.title": "En ce moment",
   "now.reading.label": "Lecture",
   "now.reading.value":
-    "Le fleuve céleste, de Guy Gavriel Kay<br />Les Peuples du Nord : De Fróði à Harald l'Impitoyable, de Lucie Malbos",
+    "La Fileuse d'argent, de Naomi Novik<br />Les Peuples du Nord : De Fróði à Harald l'Impitoyable, de Lucie Malbos",
   "now.learning.label": "Apprentissage",
   "now.learning.value": "Parler suédois",
   "now.planning.label": "Projet",

@@ -10,7 +10,7 @@ const isDev = process.argv.includes("--dev");
 const buildCss = async (): Promise<void> => {
   const source = await readFile("src/style.css", "utf8");
   const { code } = await transform(source, { loader: "css", minify: true });
-  await writeFile("dist/style.css", code);
+  await writeFile("docs/style.css", code);
 };
 
 // Bundle index.html.ts on every build (inlining the modules it imports) and
@@ -30,12 +30,12 @@ const loadPage = async (): Promise<typeof Page> => {
 
 const run = async (): Promise<void> => {
   const start = performance.now();
-  await mkdir("dist", { recursive: true });
+  await mkdir("docs", { recursive: true });
   const [page] = await Promise.all([loadPage(), buildCss()]);
-  await cp("src/assets", "dist/assets", { recursive: true });
+  await cp("src/assets", "docs/assets", { recursive: true });
   for (const lang of page.LANGUAGES) {
-    // "/" -> dist/index.html, "/fr/" -> dist/fr/index.html
-    const file = `dist${page.pagePath(lang)}index.html`;
+    // "/" -> docs/index.html, "/fr/" -> docs/fr/index.html
+    const file = `docs${page.pagePath(lang)}index.html`;
     await mkdir(dirname(file), { recursive: true });
     await writeFile(file, page.html({ lang }));
   }
@@ -51,20 +51,20 @@ const MIME_TYPES: Record<string, string> = {
   ".ico": "image/x-icon",
 };
 
-// Minimal static server for dist/, since pages use root-absolute URLs.
+// Minimal static server for docs/, since pages use root-absolute URLs.
 const serveDev = (port: number): void => {
   createServer(async (req, res) => {
     const path = decodeURIComponent((req.url ?? "/").split("?")[0]);
-    const file = normalize(join("dist", path.endsWith("/") ? `${path}index.html` : path));
+    const file = normalize(join("docs", path.endsWith("/") ? `${path}index.html` : path));
     try {
-      if (!file.startsWith("dist")) throw new Error("outside dist");
+      if (!file.startsWith("docs")) throw new Error("outside docs");
       const body = await readFile(file);
       res.writeHead(200, { "Content-Type": MIME_TYPES[extname(file)] ?? "application/octet-stream" });
       res.end(body);
     } catch {
       res.writeHead(404).end("Not found");
     }
-  }).listen(port, () => console.log(`Serving dist/ at http://localhost:${port}`));
+  }).listen(port, () => console.log(`Serving docs/ at http://localhost:${port}`));
 };
 
 if (!isDev) {

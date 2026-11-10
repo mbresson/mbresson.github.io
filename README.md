@@ -14,7 +14,7 @@ Hi! This is the source code for my personal homepage. Any feedback is welcome!
 ## Building
 
 1. Install dependencies: `npm ci`
-2. Production build: `npm run dist`
+2. Production build: `npm run build`
 3. Interactive development: `npm run dev`
 
-The output is dist/index.html (with CSS and JS embedded).
+The output is docs/index.html (with CSS and JS embedded).
